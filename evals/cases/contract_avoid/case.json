@@ -1,0 +1,67 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "contract_avoid",
+  "case_type": "CONTRACT",
+  "description": "Expected return is negative and base intrinsic value is below price.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "report_id": "synthetic-avoid",
+      "market": {
+        "current_price": 250.0
+      },
+      "recommendation": {
+        "action": "AVOID",
+        "investment_attractiveness": "Unattractive",
+        "base_case_total_return": -0.032,
+        "expected_total_return": -0.057,
+        "expected_annualized_return": -0.028918129095182876,
+        "risk_premium": -0.06891812909518288,
+        "margin_of_safety": -0.08695652173913043,
+        "rationale": "Expected return is negative."
+      },
+      "scenarios": [
+        {
+          "name": "Bear",
+          "probability": 0.25,
+          "intrinsic_value_as_of": 145.0,
+          "target_value_at_horizon": 155.0,
+          "cumulative_dividends": 2.0,
+          "total_return": -0.372,
+          "annualized_return": -0.207535489753642,
+          "driver_assumptions": ["Growth slows materially."]
+        },
+        {
+          "name": "Base",
+          "probability": 0.5,
+          "intrinsic_value_as_of": 230.0,
+          "target_value_at_horizon": 240.0,
+          "cumulative_dividends": 2.0,
+          "total_return": -0.032,
+          "annualized_return": -0.01613008990009257,
+          "driver_assumptions": ["Growth and margins remain stable."]
+        },
+        {
+          "name": "Bull",
+          "probability": 0.25,
+          "intrinsic_value_as_of": 285.0,
+          "target_value_at_horizon": 300.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.208,
+          "annualized_return": 0.09909053312272698,
+          "driver_assumptions": ["Growth and margins exceed the base case."]
+        }
+      ]
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_report": {
+    "status": "COMPLETE",
+    "recommendation": "AVOID"
+  },
+  "expected_harness": {
+    "verdict": "PASS"
+  },
+  "numeric_tolerance": 1e-09
+}
+

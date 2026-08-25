@@ -1,0 +1,30 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "contract_unsupported",
+  "case_type": "CONTRACT",
+  "description": "An unsupported company type produces UNSUPPORTED with NO_RATING.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "report_id": "synthetic-unsupported",
+      "status": "UNSUPPORTED",
+      "recommendation": {
+        "action": "NO_RATING",
+        "business_quality": "Unknown",
+        "investment_attractiveness": "Undetermined",
+        "confidence": "Low",
+        "rationale": "The company requires a valuation model outside V1."
+      }
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_report": {
+    "status": "UNSUPPORTED",
+    "recommendation": "NO_RATING"
+  },
+  "expected_harness": {
+    "verdict": "PASS"
+  },
+  "numeric_tolerance": 1e-09
+}
+

@@ -66,7 +66,25 @@
     {
       "if": {
         "properties": {
-          "status": { "enum": ["INCOMPLETE", "UNSUPPORTED"] }
+          "status": { "const": "INCOMPLETE" }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "recommendation": {
+            "type": "object",
+            "properties": {
+              "action": { "type": "string", "const": "WATCH" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": { "const": "UNSUPPORTED" }
         },
         "required": ["status"]
       },

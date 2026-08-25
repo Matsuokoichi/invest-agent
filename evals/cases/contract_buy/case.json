@@ -1,0 +1,67 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "contract_buy",
+  "case_type": "CONTRACT",
+  "description": "All V1 BUY thresholds are satisfied.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "report_id": "synthetic-buy",
+      "market": {
+        "current_price": 180.0
+      },
+      "recommendation": {
+        "action": "BUY",
+        "investment_attractiveness": "Attractive",
+        "base_case_total_return": 0.34444444444444444,
+        "expected_total_return": 0.30972222222222223,
+        "expected_annualized_return": 0.14443096000685962,
+        "risk_premium": 0.10443096000685961,
+        "margin_of_safety": 0.21739130434782608,
+        "rationale": "Expected return and margin of safety exceed BUY thresholds."
+      },
+      "scenarios": [
+        {
+          "name": "Bear",
+          "probability": 0.25,
+          "intrinsic_value_as_of": 145.0,
+          "target_value_at_horizon": 155.0,
+          "cumulative_dividends": 2.0,
+          "total_return": -0.12777777777777777,
+          "annualized_return": -0.06607161825854002,
+          "driver_assumptions": ["Growth slows materially."]
+        },
+        {
+          "name": "Base",
+          "probability": 0.5,
+          "intrinsic_value_as_of": 230.0,
+          "target_value_at_horizon": 240.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.34444444444444444,
+          "annualized_return": 0.1595018087284057,
+          "driver_assumptions": ["Growth and margins remain stable."]
+        },
+        {
+          "name": "Bull",
+          "probability": 0.25,
+          "intrinsic_value_as_of": 285.0,
+          "target_value_at_horizon": 300.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.6777777777777778,
+          "annualized_return": 0.2952906151816965,
+          "driver_assumptions": ["Growth and margins exceed the base case."]
+        }
+      ]
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_report": {
+    "status": "COMPLETE",
+    "recommendation": "BUY"
+  },
+  "expected_harness": {
+    "verdict": "PASS"
+  },
+  "numeric_tolerance": 1e-09
+}
+

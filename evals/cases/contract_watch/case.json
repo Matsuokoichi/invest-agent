@@ -1,0 +1,19 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "contract_watch",
+  "case_type": "CONTRACT",
+  "description": "Expected return and margin of safety are below BUY thresholds.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json"
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_report": {
+    "status": "COMPLETE",
+    "recommendation": "WATCH"
+  },
+  "expected_harness": {
+    "verdict": "PASS"
+  },
+  "numeric_tolerance": 1e-09
+}
+

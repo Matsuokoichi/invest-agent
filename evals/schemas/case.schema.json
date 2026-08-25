@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.fulcrum.local/evaluation-case-v1.json",
+  "title": "Evaluation Case V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "case_id",
+    "case_type",
+    "description",
+    "fixture",
+    "evaluators",
+    "expected_harness"
+  ],
+  "properties": {
+    "protocol_version": { "const": "1.0.0" },
+    "case_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]+$"
+    },
+    "case_type": { "const": "CONTRACT" },
+    "description": { "type": "string", "minLength": 1 },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_report"],
+      "properties": {
+        "base_report": { "type": "string", "minLength": 1 },
+        "report_patch": { "type": "object" },
+        "omit_artifacts": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "report.json",
+              "report.md",
+              "trace.jsonl",
+              "sources.json",
+              "calculations.json",
+              "run_manifest.json"
+            ]
+          }
+        }
+      }
+    },
+    "evaluators": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["C001", "C002", "N001", "N003", "D001"]
+      }
+    },
+    "expected_harness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict"],
+      "properties": {
+        "verdict": {
+          "enum": ["PASS", "FAIL", "REVIEW_REQUIRED", "ERROR"]
+        },
+        "failed_evaluators_contains": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["C001", "C002", "N001", "N003", "D001"]
+          }
+        }
+      }
+    },
+    "expected_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": ["COMPLETE", "INCOMPLETE", "UNSUPPORTED"]
+        },
+        "recommendation": {
+          "enum": ["BUY", "WATCH", "AVOID", "NO_RATING"]
+        }
+      }
+    },
+    "decision_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "thesis_invalidated": { "type": "boolean" },
+        "severe_governance_issue": { "type": "boolean" },
+        "downside_asymmetry_unacceptable": { "type": "boolean" },
+        "critical_evidence_gaps": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "numeric_tolerance": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 0.001
+    }
+  }
+}
+

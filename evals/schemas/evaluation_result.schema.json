@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.fulcrum.local/evaluation-result-v1.json",
+  "title": "Evaluation Result V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "case_id",
+    "run_id",
+    "verdict",
+    "expectation_met",
+    "hard_gates",
+    "quality",
+    "forward_outcome",
+    "failed_evaluators",
+    "review_evaluators",
+    "error_evaluators",
+    "evaluator_results",
+    "artifact_paths",
+    "versions"
+  ],
+  "properties": {
+    "case_id": { "type": "string" },
+    "run_id": { "type": "string" },
+    "verdict": {
+      "enum": ["PASS", "FAIL", "REVIEW_REQUIRED", "ERROR"]
+    },
+    "expectation_met": { "type": "boolean" },
+    "hard_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passed", "failed", "review_required", "errors"],
+      "properties": {
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "review_required": { "type": "integer", "minimum": 0 },
+        "errors": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "quality": { "type": ["object", "null"] },
+    "forward_outcome": { "type": ["object", "null"] },
+    "failed_evaluators": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "review_evaluators": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "error_evaluators": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evaluator_results": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "artifact_paths": { "type": "object" },
+    "versions": { "type": "object" }
+  }
+}

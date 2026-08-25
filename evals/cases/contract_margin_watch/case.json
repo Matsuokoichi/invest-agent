@@ -1,0 +1,67 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "contract_margin_watch",
+  "case_type": "CONTRACT",
+  "description": "Expected return passes, but margin of safety remains below 15%.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "report_id": "synthetic-margin-watch",
+      "recommendation": {
+        "action": "WATCH",
+        "base_case_total_return": 0.31,
+        "expected_total_return": 0.335,
+        "expected_annualized_return": 0.15542200082913427,
+        "risk_premium": 0.11542200082913426,
+        "rationale": "Margin of safety remains below 15%.",
+        "horizon_target_range": {
+          "bear": 180.0,
+          "base": 260.0,
+          "bull": 360.0,
+          "currency": "USD"
+        }
+      },
+      "scenarios": [
+        {
+          "name": "Bear",
+          "probability": 0.25,
+          "intrinsic_value_as_of": 145.0,
+          "target_value_at_horizon": 180.0,
+          "cumulative_dividends": 2.0,
+          "total_return": -0.09,
+          "annualized_return": -0.04606079858305434,
+          "driver_assumptions": ["Growth slows materially."]
+        },
+        {
+          "name": "Base",
+          "probability": 0.5,
+          "intrinsic_value_as_of": 230.0,
+          "target_value_at_horizon": 260.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.31,
+          "annualized_return": 0.1445523142259597,
+          "driver_assumptions": ["Growth and margins remain stable."]
+        },
+        {
+          "name": "Bull",
+          "probability": 0.25,
+          "intrinsic_value_as_of": 285.0,
+          "target_value_at_horizon": 360.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.81,
+          "annualized_return": 0.3453624047073711,
+          "driver_assumptions": ["Growth and margins exceed the base case."]
+        }
+      ]
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_report": {
+    "status": "COMPLETE",
+    "recommendation": "WATCH"
+  },
+  "expected_harness": {
+    "verdict": "PASS"
+  },
+  "numeric_tolerance": 1e-09
+}

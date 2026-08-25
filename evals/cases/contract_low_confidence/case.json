@@ -1,0 +1,67 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "contract_low_confidence",
+  "case_type": "CONTRACT",
+  "description": "Return and margin thresholds pass, but Low confidence forces WATCH.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "report_id": "synthetic-low-confidence",
+      "market": {
+        "current_price": 190.0
+      },
+      "recommendation": {
+        "action": "WATCH",
+        "confidence": "Low",
+        "base_case_total_return": 0.2736842105263158,
+        "expected_total_return": 0.24078947368421053,
+        "expected_annualized_return": 0.11390730031013363,
+        "risk_premium": 0.07390730031013362,
+        "margin_of_safety": 0.17391304347826086,
+        "rationale": "Confidence is Low."
+      },
+      "scenarios": [
+        {
+          "name": "Bear",
+          "probability": 0.25,
+          "intrinsic_value_as_of": 145.0,
+          "target_value_at_horizon": 155.0,
+          "cumulative_dividends": 2.0,
+          "total_return": -0.1736842105263158,
+          "annualized_return": -0.09098086407728234,
+          "driver_assumptions": ["Growth slows materially."]
+        },
+        {
+          "name": "Base",
+          "probability": 0.5,
+          "intrinsic_value_as_of": 230.0,
+          "target_value_at_horizon": 240.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.2736842105263158,
+          "annualized_return": 0.12857618729366949,
+          "driver_assumptions": ["Growth and margins remain stable."]
+        },
+        {
+          "name": "Bull",
+          "probability": 0.25,
+          "intrinsic_value_as_of": 285.0,
+          "target_value_at_horizon": 300.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.5894736842105263,
+          "annualized_return": 0.26074330623268693,
+          "driver_assumptions": ["Growth and margins exceed the base case."]
+        }
+      ]
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_report": {
+    "status": "COMPLETE",
+    "recommendation": "WATCH"
+  },
+  "expected_harness": {
+    "verdict": "PASS"
+  },
+  "numeric_tolerance": 1e-09
+}
+

@@ -1,0 +1,19 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "fault_schema_version",
+  "case_type": "CONTRACT",
+  "description": "Harness self-test: C001 must reject an unknown report schema version.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "schema_version": "9.9.9"
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_harness": {
+    "verdict": "FAIL",
+    "failed_evaluators_contains": ["C001"]
+  },
+  "numeric_tolerance": 1e-09
+}
+

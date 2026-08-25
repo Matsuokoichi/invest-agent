@@ -2,36 +2,41 @@
 
 ## Project Structure & Module Organization
 
-This repository is currently documentation-first. Keep project decisions and specifications under `docs/`:
+Keep product decisions and specifications under `docs/`:
 
 - `docs/v1_specification.md` - canonical V1 product and report specification.
 - `docs/vision.md` - product purpose and scope.
 - `docs/architecture.md` - system design and component boundaries.
 - `docs/investment_policy.md` - supported universe, strategy, research dimensions, and required outputs.
 - `docs/agent_behavior.md` - evidence, citation, thesis-change, and uncertainty behavior.
-- `docs/evaluation.md` - quality and performance measures.
+- `docs/evaluation.md`, `docs/evaluation_protocol.md`, and `docs/evaluation_harness.md` - evaluation policy, gates, and harness contract.
 - `docs/report_schema.json` and `docs/examples/` - report contract and illustrative output.
+- `src/eval_harness/` - independent case runner and deterministic evaluators.
+- `evals/` - versioned suites, cases, fixtures, and Harness schemas.
+- `tests/` - Harness unit and integration tests.
 
-The root `README.md` is the public entry point and should be updated when the project gains runnable components. Place future implementation code and tests in clearly named top-level directories (for example, `src/` and `tests/`) rather than mixing them into `docs/`.
+Keep future Agent code under `src/invest_agent/`. The Harness must not import Agent internals; integration occurs through the adapter artifact contract.
 
 ## Build, Test, and Development Commands
 
-No build system, runtime, or test framework is configured yet. For documentation-only changes, review the rendered Markdown and inspect the diff with:
+Use Python 3.11+ and `uv`:
 
 ```powershell
-Get-Content -Raw docs\<file>.md
-git diff --check
+uv sync --extra dev
+uv run pytest
+uv run eval-harness run --suite evals\suites\v1_contract.json
+uv run eval-harness run --suite evals\suites\harness_self_test.json
 ```
 
-When code is introduced, document the canonical install, development, build, lint, and test commands in `README.md` and update this guide.
+The first command creates `.venv` and installs development dependencies. The suites validate normal contracts and intentional fault detection respectively. Outputs go to ignored `.eval-runs/` directories.
 
 ## Coding Style & Naming Conventions
 
-Use UTF-8 Markdown, ATX headings, short paragraphs, and concise bullet lists. Use lowercase `snake_case` for documentation filenames, matching the existing files. Keep terminology consistent with the investment policy (`BUY`, `WATCH`, `AVOID`; bull/base/bear cases). Every research claim should retain its source and timestamp, and uncertainty should be stated explicitly.
+Use UTF-8 Markdown, ATX headings, short paragraphs, and lowercase `snake_case` filenames. Python uses four-space indentation, type hints, descriptive `snake_case` functions, and `PascalCase` classes. Keep investment terminology consistent (`BUY`, `WATCH`, `AVOID`, `NO_RATING`; Bear/Base/Bull). Every material claim must retain its source and timestamp.
 
 ## Testing Guidelines
 
-There are no automated tests or coverage thresholds at present. Validate documentation changes for accurate links, consistent terminology, readable rendering, and clean whitespace (`git diff --check`). Future tests should live under `tests/` and use names that describe the behavior being verified.
+Name tests `test_<behavior>`. Add a contract case for supported behavior and a fault fixture for every new deterministic evaluator. A self-test suite succeeds only when intentional defects produce their expected failures. Run `uv run pytest` and `git diff --check` before submitting changes. No coverage threshold is currently enforced.
 
 ## Commit & Pull Request Guidelines
 

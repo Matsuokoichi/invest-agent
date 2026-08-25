@@ -1,0 +1,21 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "fault_decision",
+  "case_type": "CONTRACT",
+  "description": "Harness self-test: D001 must reject BUY below policy thresholds.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "recommendation": {
+        "action": "BUY"
+      }
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_harness": {
+    "verdict": "FAIL",
+    "failed_evaluators_contains": ["D001"]
+  },
+  "numeric_tolerance": 1e-09
+}
+

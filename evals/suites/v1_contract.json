@@ -1,0 +1,15 @@
+{
+  "suite_id": "v1_contract",
+  "protocol_version": "1.0.0",
+  "description": "Deterministic V1 contract evaluation cases.",
+  "cases": [
+    "../cases/contract_watch/case.json",
+    "../cases/contract_buy/case.json",
+    "../cases/contract_avoid/case.json",
+    "../cases/contract_no_probabilities/case.json",
+    "../cases/contract_low_confidence/case.json",
+    "../cases/contract_incomplete/case.json",
+    "../cases/contract_unsupported/case.json",
+    "../cases/contract_margin_watch/case.json"
+  ]
+}

@@ -19,6 +19,19 @@ CLI / API
      -> Report Renderer (validated JSON -> Markdown)
 ```
 
+Agent内のEvidence Auditorは出力前の自己検査であり、release評価の主体ではない。外部のEvaluation Harnessがsource snapshotとpolicyを使って独立再検証する。
+
+```text
+Evaluation Case Store
+  -> Evaluation Harness
+     -> Agent Adapter
+     -> Artifact Collector
+     -> Independent Evaluators
+     -> Result Aggregator
+```
+
+Harnessの詳細は [Evaluation Harness Specification](evaluation_harness.md) に従う。
+
 ## Core records
 
 - `SourceRecord`：URL、source tier、publisher、published_at、retrieved_at、as-of availability、document hash
@@ -53,4 +66,4 @@ CLI / API
 invest analyze <TICKER> [--as-of YYYY-MM-DD] [--horizon 12|24|36]
 ```
 
-出力は検証済みJSON、Markdownレポート、評価結果、使用source一覧とする。
+Agent出力はJSON、Markdownレポート、構造化trace、計算artifact、使用source一覧、内部audit結果とする。外部評価結果はEvaluation Harnessが別artifactとして生成する。

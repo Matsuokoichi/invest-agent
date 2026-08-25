@@ -1,0 +1,17 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "fault_missing_artifact",
+  "case_type": "CONTRACT",
+  "description": "Harness self-test: C002 must detect a missing required artifact.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "omit_artifacts": ["report.md"]
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_harness": {
+    "verdict": "FAIL",
+    "failed_evaluators_contains": ["C002"]
+  },
+  "numeric_tolerance": 1e-09
+}
+

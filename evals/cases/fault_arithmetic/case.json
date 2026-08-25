@@ -1,0 +1,21 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "fault_arithmetic",
+  "case_type": "CONTRACT",
+  "description": "Harness self-test: N001 must independently detect a wrong expected return.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "recommendation": {
+        "expected_total_return": 0.5
+      }
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_harness": {
+    "verdict": "FAIL",
+    "failed_evaluators_contains": ["N001"]
+  },
+  "numeric_tolerance": 1e-09
+}
+

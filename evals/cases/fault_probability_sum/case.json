@@ -1,0 +1,50 @@
+{
+  "protocol_version": "1.0.0",
+  "case_id": "fault_probability_sum",
+  "case_type": "CONTRACT",
+  "description": "Harness self-test: N003 must reject probabilities that sum to 90%.",
+  "fixture": {
+    "base_report": "../../fixtures/base_report.json",
+    "report_patch": {
+      "scenarios": [
+        {
+          "name": "Bear",
+          "probability": 0.2,
+          "intrinsic_value_as_of": 145.0,
+          "target_value_at_horizon": 155.0,
+          "cumulative_dividends": 2.0,
+          "total_return": -0.215,
+          "annualized_return": -0.11399774266653251,
+          "driver_assumptions": ["Growth slows materially."]
+        },
+        {
+          "name": "Base",
+          "probability": 0.5,
+          "intrinsic_value_as_of": 230.0,
+          "target_value_at_horizon": 240.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.21,
+          "annualized_return": 0.10000000000000009,
+          "driver_assumptions": ["Growth and margins remain stable."]
+        },
+        {
+          "name": "Bull",
+          "probability": 0.2,
+          "intrinsic_value_as_of": 285.0,
+          "target_value_at_horizon": 300.0,
+          "cumulative_dividends": 2.0,
+          "total_return": 0.51,
+          "annualized_return": 0.22882057274445078,
+          "driver_assumptions": ["Growth and margins exceed the base case."]
+        }
+      ]
+    }
+  },
+  "evaluators": ["C001", "C002", "N001", "N003", "D001"],
+  "expected_harness": {
+    "verdict": "FAIL",
+    "failed_evaluators_contains": ["N003"]
+  },
+  "numeric_tolerance": 1e-09
+}
+

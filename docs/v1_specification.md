@@ -4,7 +4,7 @@ Status: **Approved for V1 implementation**
 
 Schema version: **1.0.0**
 
-本書をV1の正規仕様とする。詳細ルールは `investment_policy.md`、`agent_behavior.md`、`architecture.md`、`evaluation.md` に分割する。矛盾がある場合は本書を優先する。
+本書をV1の正規仕様とする。詳細ルールは `investment_policy.md`、`agent_behavior.md`、`architecture.md`、`evaluation.md`、`evaluation_protocol.md`、`evaluation_harness.md` に分割する。矛盾がある場合は本書を優先する。
 
 ## 1. Mission
 
@@ -133,7 +133,7 @@ Define -> Understand Business -> Identify Drivers -> Financial Analysis -> Indus
 
 ## 7. V1 completion criteria
 
-V1完成とは、10銘柄以上のGolden setに対して、同一snapshotから再現可能なJSONとMarkdownを生成し、`evaluation.md` のrelease gatesを満たすことをいう。リターン実績は継続評価項目であり、初回リリースの合否条件にはしない。
+V1完成とは、独立したEvaluation Harnessがversioned Reference Evaluation Suiteを実行し、同一snapshotから再現可能なJSON、Markdown、構造化traceを生成して、`evaluation_protocol.md` のrelease条件を満たすことをいう。リターン実績は継続評価項目であり、初回リリースの合否条件にはしない。
 
 ## 8. Design basis
 

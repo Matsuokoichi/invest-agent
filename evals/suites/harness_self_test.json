@@ -1,0 +1,12 @@
+{
+  "suite_id": "harness_self_test",
+  "protocol_version": "1.0.0",
+  "description": "Fault-injection tests for deterministic Harness evaluators.",
+  "cases": [
+    "../cases/fault_schema_version/case.json",
+    "../cases/fault_probability_sum/case.json",
+    "../cases/fault_arithmetic/case.json",
+    "../cases/fault_decision/case.json",
+    "../cases/fault_missing_artifact/case.json"
+  ]
+}

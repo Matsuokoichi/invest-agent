@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.fulcrum.local/trace-event-v1.json",
+  "title": "Research Trace Event V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event",
+    "sequence",
+    "timestamp",
+    "run_id",
+    "case_id",
+    "source_ids",
+    "claim_ids",
+    "status"
+  ],
+  "properties": {
+    "event": {
+      "enum": [
+        "research_started",
+        "source_selected",
+        "fact_extracted",
+        "initial_thesis_created",
+        "counter_evidence_search_started",
+        "counter_evidence_recorded",
+        "thesis_reconsidered",
+        "forecast_completed",
+        "valuation_completed",
+        "decision_computed",
+        "evidence_audit_completed",
+        "report_emitted"
+      ]
+    },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "case_id": { "type": "string", "minLength": 1 },
+    "source_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "claim_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status": { "enum": ["started", "completed", "failed"] }
+  }
+}
+
