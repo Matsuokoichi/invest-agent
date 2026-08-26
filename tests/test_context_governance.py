@@ -6,7 +6,6 @@ from context_governance.audit import audit_repository
 from context_governance.manifest import load_manifest
 from context_governance.resolver import resolve_context
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -17,9 +16,9 @@ def test_repository_context_audit_passes() -> None:
 
 
 def test_context_workflow_runs_for_pull_requests_only() -> None:
-    workflow = (
-        REPO_ROOT / ".github/workflows/context-governance.yml"
-    ).read_text(encoding="utf-8")
+    workflow = (REPO_ROOT / ".github/workflows/context-governance.yml").read_text(
+        encoding="utf-8"
+    )
 
     assert "\n  pull_request:" in workflow
     assert "\n  schedule:" not in workflow
@@ -30,9 +29,7 @@ def test_context_workflow_runs_for_pull_requests_only() -> None:
 def test_resolver_returns_root_and_evaluation_context() -> None:
     manifest = load_manifest(REPO_ROOT / "context/MANIFEST.toml")
 
-    resolved = resolve_context(
-        manifest, "evals/cases/contract_buy/case.json"
-    )
+    resolved = resolve_context(manifest, "evals/cases/contract_buy/case.json")
 
     assert resolved.scopes == ("root", "evaluation_cases")
     assert resolved.instructions == ("AGENTS.md", "evals/AGENTS.md")
@@ -93,9 +90,7 @@ def _write_minimal_repository(root: Path) -> None:
     (root / "AGENTS.md").write_text("# Root\n", encoding="utf-8")
     (root / "docs/product.md").write_text("# Product\n", encoding="utf-8")
     (root / "context/POLICY.md").write_text("# Policy\n", encoding="utf-8")
-    (root / "context/REVIEW_RUBRIC.md").write_text(
-        "# Rubric\n", encoding="utf-8"
-    )
+    (root / "context/REVIEW_RUBRIC.md").write_text("# Rubric\n", encoding="utf-8")
     (root / "context/MANIFEST.toml").write_text(
         """version = 1
 policy = "context/POLICY.md"

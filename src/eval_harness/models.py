@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
 
-class EvaluationStatus(str, Enum):
-    PASS = "PASS"
+class EvaluationStatus(StrEnum):
+    PASS = "PASS"  # noqa: S105 - Evaluation verdict, not a credential.
     FAIL = "FAIL"
     REVIEW_REQUIRED = "REVIEW_REQUIRED"
     ERROR = "ERROR"
@@ -97,4 +97,3 @@ class CaseResult:
                 "protocol": "1.0.0",
             },
         }
-

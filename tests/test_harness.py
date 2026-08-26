@@ -8,7 +8,6 @@ from eval_harness.io import deep_merge, read_json
 from eval_harness.models import EvaluationStatus, EvaluatorResult
 from eval_harness.runner import HarnessRunner
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -46,8 +45,7 @@ def test_fault_injection_suite_detects_every_fault(tmp_path: Path) -> None:
     assert all(case["expectation_met"] for case in summary["cases"])
 
     failures = {
-        case["case_id"]: set(case["failed_evaluators"])
-        for case in summary["cases"]
+        case["case_id"]: set(case["failed_evaluators"]) for case in summary["cases"]
     }
     assert "C001" in failures["fault_schema_version"]
     assert "N003" in failures["fault_probability_sum"]

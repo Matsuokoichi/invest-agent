@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import traceback
 from datetime import UTC, datetime
 from pathlib import Path
@@ -58,16 +57,14 @@ class HarnessRunner:
         suite_directory: Path,
     ) -> CaseResult:
         case_directory = suite_directory / case["case_id"]
-        self.adapter.execute(
-            self.repo_root, case_path, case, case_directory
-        )
+        self.adapter.execute(self.repo_root, case_path, case, case_directory)
 
         report = None
         report_load_error = None
         report_path = case_directory / "report.json"
         try:
             report = read_json(report_path)
-        except Exception as error:  # C001/C002 report the concrete failure.
+        except Exception as error:  # noqa: BLE001 - C001/C002 report the failure.
             report_load_error = str(error)
 
         context = EvaluationContext(
@@ -107,7 +104,7 @@ class HarnessRunner:
             )
         try:
             return evaluator_type().evaluate(context)
-        except Exception as error:  # Keep one evaluator failure from hiding others.
+        except Exception as error:  # noqa: BLE001 - isolate evaluator failures.
             return EvaluatorResult(
                 evaluator_id,
                 EvaluationStatus.ERROR,
@@ -156,15 +153,10 @@ def render_summary(summary: dict[str, Any]) -> str:
     lines = [
         f"Suite: {summary['suite_id']}",
         f"Run: {summary['run_id']}",
-        (
-            f"Expectations: {summary['expectations_met']}/"
-            f"{summary['case_count']}"
-        ),
+        (f"Expectations: {summary['expectations_met']}/{summary['case_count']}"),
     ]
     for case in summary["cases"]:
         marker = "OK" if case["expectation_met"] else "MISMATCH"
-        lines.append(
-            f"[{marker}] {case['case_id']}: {case['verdict']}"
-        )
+        lines.append(f"[{marker}] {case['case_id']}: {case['verdict']}")
     lines.append("SUCCESS" if summary["success"] else "FAILED")
     return "\n".join(lines)

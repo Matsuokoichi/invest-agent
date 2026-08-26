@@ -20,6 +20,8 @@ Use the `uv`-managed Python declared in `.python-version`:
 
 ```powershell
 uv sync --extra dev
+uv run ruff check .
+uv run ruff format --check .
 uv run context-audit resolve --path <changed-path>
 uv run context-audit check
 uv run pytest

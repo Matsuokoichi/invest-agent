@@ -3,14 +3,13 @@ from __future__ import annotations
 import ast
 import os
 import re
+from collections.abc import Iterator
 from pathlib import Path
 from urllib.parse import unquote
 
 from .manifest import ManifestError, load_manifest
-from .models import AuditReport, Issue, Manifest, Severity
+from .models import AuditReport, Boundary, Issue, Manifest, Severity
 from .patterns import matches
-from .resolver import resolve_context
-
 
 CHECKS = (
     "manifest",
@@ -27,9 +26,7 @@ IGNORED_DIRECTORIES = {".git", ".venv", ".pytest_cache", "__pycache__"}
 LINK_PATTERN = re.compile(r"!?(?:\[[^\]]*\])\(([^)]+)\)")
 
 
-def audit_repository(
-    repo_root: Path, manifest_path: Path | None = None
-) -> AuditReport:
+def audit_repository(repo_root: Path, manifest_path: Path | None = None) -> AuditReport:
     root = repo_root.resolve()
     report = AuditReport(CHECKS)
     target = manifest_path or root / "context/MANIFEST.toml"
@@ -40,13 +37,11 @@ def audit_repository(
         return report
 
     files = tuple(_iter_files(root))
-    relative_files = {
-        path.relative_to(root).as_posix(): path for path in files
-    }
+    relative_files = {path.relative_to(root).as_posix(): path for path in files}
     _check_required_files(root, manifest, report)
     _check_hierarchy(root, manifest, report)
     _check_canonical(root, manifest, report)
-    _check_agents(root, manifest, relative_files, report)
+    _check_agents(manifest, relative_files, report)
     _check_links(root, manifest, relative_files, report)
     _check_scope_overlap(manifest, relative_files, report)
     _check_boundaries(manifest, relative_files, report)
@@ -70,28 +65,24 @@ def render_report(report: AuditReport) -> str:
         for issue in issues:
             location = f" ({issue.path})" if issue.path else ""
             lines.append(
-                f"  [{issue.severity.value} {issue.code}] "
-                f"{issue.message}{location}"
+                f"  [{issue.severity.value} {issue.code}] {issue.message}{location}"
             )
     lines.append("SUCCESS" if report.success else "FAILED")
     return "\n".join(lines)
 
 
-def _iter_files(root: Path):
+def _iter_files(root: Path) -> Iterator[Path]:
     for directory, dirnames, filenames in os.walk(root):
         dirnames[:] = [
             name
             for name in dirnames
-            if name not in IGNORED_DIRECTORIES
-            and not name.startswith(".eval-runs")
+            if name not in IGNORED_DIRECTORIES and not name.startswith(".eval-runs")
         ]
         for filename in filenames:
             yield Path(directory) / filename
 
 
-def _check_required_files(
-    root: Path, manifest: Manifest, report: AuditReport
-) -> None:
+def _check_required_files(root: Path, manifest: Manifest, report: AuditReport) -> None:
     for relative in manifest.required_files:
         if not (root / relative).is_file():
             _add(
@@ -190,7 +181,6 @@ def _check_canonical(root: Path, manifest: Manifest, report: AuditReport) -> Non
 
 
 def _check_agents(
-    root: Path,
     manifest: Manifest,
     relative_files: dict[str, Path],
     report: AuditReport,
@@ -300,9 +290,7 @@ def _check_scope_overlap(
     relative_files: dict[str, Path],
     report: AuditReport,
 ) -> None:
-    parents = {
-        name: _all_parents(name, manifest) for name in manifest.scopes
-    }
+    parents = {name: _all_parents(name, manifest) for name in manifest.scopes}
     for relative in relative_files:
         direct = [
             name
@@ -366,8 +354,7 @@ def _check_security_boundaries(
 ) -> None:
     for boundary in manifest.security_boundaries:
         active = any(
-            matches(relative, boundary.activation_paths)
-            for relative in relative_files
+            matches(relative, boundary.activation_paths) for relative in relative_files
         )
         if active and boundary.implementation_status != "ENFORCED":
             _add(
@@ -382,7 +369,12 @@ def _check_security_boundaries(
             )
 
 
-def _check_python_imports(boundary, relative: str, path: Path, report: AuditReport) -> None:
+def _check_python_imports(
+    boundary: Boundary,
+    relative: str,
+    path: Path,
+    report: AuditReport,
+) -> None:
     try:
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=relative)
     except SyntaxError as error:

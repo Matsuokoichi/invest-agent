@@ -9,7 +9,7 @@ def read_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         value = json.load(handle)
     if not isinstance(value, dict):
-        raise ValueError(f"Expected a JSON object: {path}")
+        raise TypeError(f"Expected a JSON object: {path}")
     return value
 
 
@@ -39,4 +39,3 @@ def resolve_inside(root: Path, candidate: Path) -> Path:
     if not resolved.is_relative_to(resolved_root):
         raise ValueError(f"Path escapes repository root: {candidate}")
     return resolved
-

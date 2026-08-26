@@ -12,4 +12,3 @@ EVALUATOR_REGISTRY = {
 }
 
 __all__ = ["EVALUATOR_REGISTRY"]
-

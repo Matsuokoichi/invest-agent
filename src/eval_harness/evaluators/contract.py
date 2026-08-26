@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from eval_harness.models import EvaluationContext, EvaluatorResult
 
 from .base import failed, passed
@@ -7,14 +9,16 @@ from .base import failed, passed
 
 class RequiredContractEvaluator:
     evaluator_id = "C002"
-    required_artifacts = {
-        "report.json",
-        "report.md",
-        "trace.jsonl",
-        "sources.json",
-        "calculations.json",
-        "run_manifest.json",
-    }
+    required_artifacts: ClassVar[frozenset[str]] = frozenset(
+        {
+            "report.json",
+            "report.md",
+            "trace.jsonl",
+            "sources.json",
+            "calculations.json",
+            "run_manifest.json",
+        }
+    )
 
     def evaluate(self, context: EvaluationContext) -> EvaluatorResult:
         details: list[dict[str, object]] = []
@@ -72,4 +76,3 @@ class RequiredContractEvaluator:
                 details,
             )
         return passed(self.evaluator_id, "Required Agent artifacts are present")
-

@@ -64,9 +64,7 @@ def load_manifest(path: Path) -> Manifest:
             instructions=_strings(
                 value.get("instructions"), f"scopes.{name}.instructions"
             ),
-            canonical=_strings(
-                value.get("canonical"), f"scopes.{name}.canonical"
-            ),
+            canonical=_strings(value.get("canonical"), f"scopes.{name}.canonical"),
         )
 
     boundaries = tuple(
@@ -115,9 +113,7 @@ def load_manifest(path: Path) -> Manifest:
         version=1,
         policy=_relative(data.get("policy"), "policy"),
         review_rubric=_relative(data.get("review_rubric"), "review_rubric"),
-        managed_markdown=_strings(
-            data.get("managed_markdown"), "managed_markdown"
-        ),
+        managed_markdown=_strings(data.get("managed_markdown"), "managed_markdown"),
         required_files=_strings(data.get("required_files"), "required_files"),
         root_agents_words=_positive_int(
             limits.get("root_agents_words"), "limits.root_agents_words"

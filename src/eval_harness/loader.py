@@ -20,7 +20,9 @@ def _validate(document: dict[str, Any], schema_path: Path, label: str) -> None:
         raise ValueError(f"Invalid {label}: {rendered}")
 
 
-def load_suite(repo_root: Path, suite_path: Path) -> tuple[dict[str, Any], list[tuple[Path, dict[str, Any]]]]:
+def load_suite(
+    repo_root: Path, suite_path: Path
+) -> tuple[dict[str, Any], list[tuple[Path, dict[str, Any]]]]:
     suite_path = resolve_inside(repo_root, suite_path)
     suite = read_json(suite_path)
     _validate(suite, repo_root / "evals/schemas/suite.schema.json", "suite")
@@ -29,7 +31,8 @@ def load_suite(repo_root: Path, suite_path: Path) -> tuple[dict[str, Any], list[
     for relative_case_path in suite["cases"]:
         case_path = resolve_inside(repo_root, suite_path.parent / relative_case_path)
         case = read_json(case_path)
-        _validate(case, repo_root / "evals/schemas/case.schema.json", f"case {case_path}")
+        _validate(
+            case, repo_root / "evals/schemas/case.schema.json", f"case {case_path}"
+        )
         cases.append((case_path, case))
     return suite, cases
-

@@ -10,6 +10,8 @@ Python 3.11以上と`uv`を使用します。
 
 ```powershell
 uv sync --extra dev
+uv run ruff check .
+uv run ruff format --check .
 uv run context-audit check
 uv run pytest
 uv run eval-harness run --suite evals\suites\v1_contract.json

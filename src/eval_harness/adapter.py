@@ -7,7 +7,6 @@ from typing import Any
 
 from .io import deep_merge, read_json, resolve_inside, write_json
 
-
 TRACE_EVENTS = [
     "research_started",
     "source_selected",
@@ -35,9 +34,7 @@ class FixtureAdapter:
         run_directory: Path,
     ) -> None:
         fixture = case["fixture"]
-        base_path = resolve_inside(
-            repo_root, case_path.parent / fixture["base_report"]
-        )
+        base_path = resolve_inside(repo_root, case_path.parent / fixture["base_report"])
         report = deep_merge(read_json(base_path), fixture.get("report_patch", {}))
         omitted = set(fixture.get("omit_artifacts", []))
         run_directory.mkdir(parents=True, exist_ok=True)

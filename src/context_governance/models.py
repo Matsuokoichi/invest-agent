@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any
 
 
-class Severity(str, Enum):
+class Severity(StrEnum):
     ERROR = "ERROR"
     WARNING = "WARNING"
 
@@ -47,9 +47,7 @@ class AuditReport:
             "checks": {
                 check: {
                     "status": self._status(check),
-                    "issues": [
-                        issue.to_dict() for issue in self.issues_for(check)
-                    ],
+                    "issues": [issue.to_dict() for issue in self.issues_for(check)],
                 }
                 for check in self.checks
             },

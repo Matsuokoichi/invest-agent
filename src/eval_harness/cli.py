@@ -38,7 +38,7 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         summary = HarnessRunner(repo_root, output).run_suite(suite)
-    except Exception as error:
+    except Exception as error:  # noqa: BLE001 - CLI converts failures to exit status.
         print(f"Harness error: {error}", file=sys.stderr)
         return 2
 
@@ -48,4 +48,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

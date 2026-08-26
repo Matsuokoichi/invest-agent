@@ -68,27 +68,20 @@ class ReturnArithmeticEvaluator:
         probabilities = [scenario["probability"] for scenario in report["scenarios"]]
         if all(probability is not None for probability in probabilities):
             expected_total_return = sum(
-                float(scenario["probability"])
-                * scenario_results[scenario["name"]]
+                float(scenario["probability"]) * scenario_results[scenario["name"]]
                 for scenario in report["scenarios"]
             )
             expected_annualized_return = _annualize(expected_total_return, horizon)
-            risk_premium = expected_annualized_return - float(
-                market["treasury_yield"]
-            )
+            risk_premium = expected_annualized_return - float(market["treasury_yield"])
         else:
             expected_total_return = None
             expected_annualized_return = None
             risk_premium = None
 
         base_return = scenario_results.get("Base")
-        base_intrinsic = float(
-            recommendation["intrinsic_value_as_of_range"]["base"]
-        )
+        base_intrinsic = float(recommendation["intrinsic_value_as_of_range"]["base"])
         margin_of_safety = (base_intrinsic - current_price) / base_intrinsic
-        decision_hurdle = max(
-            0.10, float(market["treasury_yield"]) + 0.05
-        )
+        decision_hurdle = max(0.10, float(market["treasury_yield"]) + 0.05)
 
         expected_fields = {
             "/recommendation/base_case_total_return": base_return,
@@ -214,7 +207,9 @@ class ScenarioIntegrityEvaluator:
                 "target_value_at_horizon",
                 "total_return",
             ):
-                values = [float(by_name[name][field]) for name in ("Bear", "Base", "Bull")]
+                values = [
+                    float(by_name[name][field]) for name in ("Bear", "Base", "Bull")
+                ]
                 if values != sorted(values):
                     details.append(
                         {
@@ -255,4 +250,3 @@ class ScenarioIntegrityEvaluator:
                 details,
             )
         return passed(self.evaluator_id, "Scenario structure is internally consistent")
-

@@ -41,4 +41,3 @@ class ReportSchemaEvaluator:
             f"{len(details)} report schema violation(s)",
             details,
         )
-

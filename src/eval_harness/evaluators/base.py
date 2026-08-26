@@ -16,7 +16,4 @@ def failed(
 
 
 def not_applicable(evaluator_id: str, summary: str) -> EvaluatorResult:
-    return EvaluatorResult(
-        evaluator_id, EvaluationStatus.NOT_APPLICABLE, summary
-    )
-
+    return EvaluatorResult(evaluator_id, EvaluationStatus.NOT_APPLICABLE, summary)

@@ -28,6 +28,98 @@ addopts = "-q"
 pythonpath = ["src"]
 testpaths = ["tests"]
 
+[tool.ruff]
+required-version = ">=0.16.4"
+target-version = "py311"
+line-length = 88
+src = ["src"]
+extend-exclude = [".eval-runs"]
+
+[tool.ruff.lint]
+select = [
+  # Baseline correctness and maintainability.
+  "E",
+  "F",
+  "I",
+  "N",
+  "UP",
+  "ANN",
+  "A",
+  "ARG",
+  "ASYNC",
+  "B",
+  "BLE",
+  "C4",
+  "C90",
+  "ERA",
+  "EXE",
+  "FA",
+  "FBT",
+  "FLY",
+  "FURB",
+  "G",
+  "ICN",
+  "INP",
+  "INT",
+  "ISC003",
+  "LOG",
+  "PIE",
+  "PLC",
+  "PLE",
+  "PLW",
+  "PT",
+  "PTH",
+  "RET",
+  "RSE",
+  "RUF",
+  "S",
+  "SIM",
+  "SLOT",
+  "T10",
+  "T20",
+  "TID",
+  # Exception handling rules with a high signal-to-noise ratio.
+  "TRY004",
+  "TRY201",
+  "TRY300",
+  "TRY301",
+  "TRY400",
+]
+ignore = [
+  # JSON documents cross trust boundaries as dynamically typed values.
+  "ANN401",
+]
+unfixable = [
+  # Security and exception-boundary findings require human review.
+  "BLE",
+  "S",
+  "T20",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/**/*.py" = ["INP001"]
+"tests/**/*.py" = ["INP001", "S101"]
+"src/**/cli.py" = ["T201"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"datetime.date.today".msg = "Inject an as-of date so research remains reproducible."
+"datetime.datetime.utcnow".msg = "Use an aware UTC datetime or inject a clock."
+"datetime.datetime.utcfromtimestamp".msg = "Use an aware UTC datetime."
+"random".msg = "Inject a seeded random source; evaluators must be deterministic."
+
+[tool.ruff.lint.isort]
+known-first-party = ["context_governance", "eval_harness", "invest_agent"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 18
+
+[tool.ruff.format]
+line-ending = "lf"
+docstring-code-format = true
+
 [dependency-groups]
 dev = [
     "ruff>=0.16.4",

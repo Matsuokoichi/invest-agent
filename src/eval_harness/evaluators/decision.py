@@ -39,17 +39,13 @@ class DecisionPolicyEvaluator:
             )
             if expected_return is None:
                 expected = "WATCH"
-            elif float(expected_return) <= 0:
-                expected = "AVOID"
-            elif (
-                confidence in {"Medium", "High"}
-                and base_intrinsic <= current_price
+            elif float(expected_return) <= 0 or (
+                confidence in {"Medium", "High"} and base_intrinsic <= current_price
             ):
                 expected = "AVOID"
             elif (
                 confidence == "Low"
-                or float(expected_return)
-                < float(recommendation["decision_hurdle"])
+                or float(expected_return) < float(recommendation["decision_hurdle"])
                 or float(recommendation["margin_of_safety"]) < 0.15
             ):
                 expected = "WATCH"
