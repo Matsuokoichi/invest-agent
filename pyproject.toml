@@ -18,6 +18,7 @@ dev = [
 
 [project.scripts]
 eval-harness = "eval_harness.cli:main"
+context-audit = "context_governance.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -27,3 +28,7 @@ addopts = "-q"
 pythonpath = ["src"]
 testpaths = ["tests"]
 
+[dependency-groups]
+dev = [
+    "ruff>=0.16.4",
+]

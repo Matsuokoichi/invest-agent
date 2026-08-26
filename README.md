@@ -10,12 +10,21 @@ Python 3.11以上と`uv`を使用します。
 
 ```powershell
 uv sync --extra dev
+uv run context-audit check
 uv run pytest
 uv run eval-harness run --suite evals\suites\v1_contract.json
 uv run eval-harness run --suite evals\suites\harness_self_test.json
 ```
 
 `v1_contract`は正常な契約ケース、`harness_self_test`は既知の欠陥をHarnessが検出できることを確認する故障注入suiteです。run artifactは`.eval-runs/`へ保存されます。
+
+変更対象に適用される指示と正規文書は次で確認できます。
+
+```powershell
+uv run context-audit resolve --path evals\cases\contract_buy\case.json
+```
+
+Context Governanceの方針と機械可読なscope定義は、[Policy](context/POLICY.md)と[Manifest](context/MANIFEST.toml)を参照してください。PRではContext Auditと全テストがGitHub Actionsから実行されます。
 
 ## Documents
 

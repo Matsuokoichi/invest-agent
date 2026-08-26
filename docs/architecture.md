@@ -32,6 +32,12 @@ Evaluation Case Store
 
 Harnessの詳細は [Evaluation Harness Specification](evaluation_harness.md) に従う。
 
+## Context governance
+
+`context/MANIFEST.toml`を、pathごとのinstruction、canonical document、dependency boundaryを解決する機械可読なindexとする。`context-audit`が欠落・循環・orphan instruction・broken link・scope競合・禁止import・runtime promptへのevaluation参照をPRごとに検査する。
+
+Context boundaryとsecurity boundaryは分離する。Manifestや`AGENTS.md`はAgentへ何を渡すべきかを定義するが、秘匿性を保証しない。実Agent processを有効化する前に、Harness-privateなcase、assertion、rubricをmountしないfilesystem allowlistを実装しなければならない。決定の背景は [ADR-0001](adr/0001-context-governance.md) に記録する。
+
 ## Core records
 
 - `SourceRecord`：URL、source tier、publisher、published_at、retrieved_at、as-of availability、document hash

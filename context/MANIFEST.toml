@@ -1,0 +1,119 @@
+version = 1
+policy = "context/POLICY.md"
+review_rubric = "context/REVIEW_RUBRIC.md"
+managed_markdown = ["README.md", "AGENTS.md", "docs/**/*.md", "context/**/*.md", "evals/**/AGENTS.md"]
+required_files = [
+  "AGENTS.md",
+  "context/POLICY.md",
+  "context/REVIEW_RUBRIC.md",
+  "docs/adr/README.md",
+  "scripts/context_audit.py",
+  "tests/test_context_governance.py",
+  ".github/workflows/context-governance.yml",
+]
+
+[limits]
+root_agents_words = 400
+child_agents_words = 250
+
+[canonical.v1_product]
+path = "docs/v1_specification.md"
+description = "V1 product and report contract"
+
+[canonical.architecture]
+path = "docs/architecture.md"
+description = "System components, trust boundaries, and processing gates"
+
+[canonical.agent_behavior]
+path = "docs/agent_behavior.md"
+description = "Runtime research behavior and evidence rules"
+
+[canonical.investment_policy]
+path = "docs/investment_policy.md"
+description = "Universe, return definitions, and decision thresholds"
+
+[canonical.evaluation_protocol]
+path = "docs/evaluation_protocol.md"
+description = "Independent evaluation rules and release gates"
+
+[canonical.evaluation_harness]
+path = "docs/evaluation_harness.md"
+description = "Harness component and artifact contract"
+
+[canonical.context_governance]
+path = "context/POLICY.md"
+description = "Context authority, hierarchy, lifecycle, and boundaries"
+
+[scopes.root]
+paths = ["**"]
+extends = []
+instructions = ["AGENTS.md"]
+canonical = ["v1_product", "architecture", "context_governance"]
+
+[scopes.runtime_agent]
+paths = ["src/invest_agent/**"]
+extends = ["root"]
+instructions = []
+canonical = ["agent_behavior", "investment_policy"]
+
+[scopes.evaluation_cases]
+paths = ["evals/**"]
+extends = ["root"]
+instructions = ["evals/AGENTS.md"]
+canonical = ["evaluation_protocol", "evaluation_harness"]
+
+[scopes.evaluation_harness]
+paths = ["src/eval_harness/**", "tests/test_harness.py"]
+extends = ["root"]
+instructions = []
+canonical = ["evaluation_protocol", "evaluation_harness"]
+
+[scopes.context_governance]
+paths = [
+  "context/**",
+  "src/context_governance/**",
+  "scripts/context_audit.py",
+  "tests/test_context_governance.py",
+  ".github/workflows/context-governance.yml",
+]
+extends = ["root"]
+instructions = []
+canonical = ["context_governance", "architecture"]
+
+[[boundaries]]
+id = "runtime-does-not-import-evaluation"
+kind = "python_import"
+from_paths = ["src/invest_agent/**/*.py"]
+forbid_modules = ["eval_harness", "evals"]
+reason = "Evaluation implementation and cases must not influence runtime research."
+
+[[boundaries]]
+id = "harness-does-not-import-agent-internals"
+kind = "python_import"
+from_paths = ["src/eval_harness/**/*.py"]
+forbid_modules = ["invest_agent"]
+reason = "The Harness integrates through the external artifact contract."
+
+[[boundaries]]
+id = "runtime-prompts-hide-evaluation"
+kind = "text_reference"
+from_paths = ["src/invest_agent/prompts/**"]
+forbid_patterns = [
+  "evals/",
+  "evals\\",
+  "docs/evaluation_protocol.md",
+  "docs/evaluation_harness.md",
+  "expected_harness",
+  "expected_report",
+]
+reason = "Hidden expectations and evaluation rubrics must not enter runtime prompts."
+
+[[security_boundaries]]
+id = "agent-process-filesystem-isolation"
+consumer = "research_agent_process"
+deny_paths = ["evals/**", "tests/**", "docs/evaluation*.md"]
+activation_paths = ["src/invest_agent/**"]
+enforcement = "process_filesystem_allowlist"
+implementation_status = "PLANNED"
+required_before = "process_agent_adapter"
+reason = "Instruction-only separation does not prevent evaluation leakage."

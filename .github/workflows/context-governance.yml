@@ -1,0 +1,33 @@
+name: Context Governance
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: context-governance-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  context-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.12.5"
+          enable-cache: true
+
+      - name: Install locked environment
+        run: uv sync --locked --extra dev
+
+      - name: Audit governed context
+        run: uv run --locked context-audit check
+
+      - name: Run tests
+        run: uv run --locked pytest
